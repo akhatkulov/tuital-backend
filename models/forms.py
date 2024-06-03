@@ -1,10 +1,17 @@
+from werkzeug import *
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError,DataRequired
 from flask_wtf import FlaskForm
 
-class Login(FlaskForm):
+class Login_form(FlaskForm):
     username = StringField("Taxallusingiz",validators=[DataRequired()])
     password = PasswordField("Parolingiz",validators=[DataRequired()])
+    submit = SubmitField("Tasdiqlash")
+
+class Sign_Form(FlaskForm):
+    username = StringField("Taxallusingiz",validators=[DataRequired()])
+    password = PasswordField("Parolingiz",validators=[DataRequired()])
+    pwd = StringField("Adminlik uchun",validators=[DataRequired()])
     submit = SubmitField("Tasdiqlash")
 
 # class Post():

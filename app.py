@@ -1,9 +1,18 @@
-from flask import render_template,redirect
+from flask import render_template,redirect,request,flash,jsonify
 from werkzeug.security import check_password_hash,generate_password_hash
 from models.forms import Login_form,Sign_Form
-from db.database import User,app,db
+from db.database import User,app,db,Post,News,get_news_s,get_post_s
 from flask_login import login_user,logout_user,login_required,current_user
 from helper.auth import load_user,login_manager
+from werkzeug.utils import secure_filename
+import os
+from conf import ALLOWED_EXTENSIONS
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+
 @app.route("/")
 def home_page():
     # if current_user.is_authenticated:
@@ -18,8 +27,6 @@ def sign_page():
 
 @app.route("/signing",methods=['post','get'])
 def signing():
-        
-
         with app.app_context():
             form = Sign_Form()
             if form.pwd.data == "mexroj1945":
@@ -53,6 +60,99 @@ def login():
             return "Parol Xato"
     else:
         return "Foydalanuvchi mavjud emas"
+
+@app.route('/news_adder', methods=['POST'])
+def news_adder():
+    if request.method == 'POST':
+        files = request.files.getlist('img[]')
+        images_url = ""
+        print(files)
+        if 'img[]' not in request.files:
+            flash('No file part')
+            return redirect("/dashboard")
+        
+        for file in files:
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                images_url = images_url + filename + "|"
+            else:
+                print("error")
+
+        header = request.form.get('header', '') 
+        body = request.form.get('body', '')  
+
+        # Create a new post with form data and image URLs
+        post = News(name=header, body=body, img=images_url, aid=current_user.id)
+        db.session.add(post)
+        db.session.commit()
+
+        return 'Files successfully uploaded and post created'
+    else:
+        return 'Method not allowed'
+
+
+
+
+
+
+@app.route('/poster', methods=['POST'])
+def poster():
+    if request.method == 'POST':
+        files = request.files.getlist('img[]')
+        images_url = ""
+        print(files)
+        if 'img[]' not in request.files:
+            flash('No file part')
+            return redirect("/dashboard")
+        
+        for file in files:
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                images_url = images_url + filename + "|"
+            else:
+                print("error")
+
+        header = request.form.get('header', '') 
+        body = request.form.get('body', '')  
+
+        # Create a new post with form data and image URLs
+        post = Post(name=header, body=body, img=images_url, aid=current_user.id)
+        db.session.add(post)
+        db.session.commit()
+
+        return 'Files successfully uploaded and post created'
+    else:
+        return 'Method not allowed'
+    
+@app.route("/api/post",methods=['GET'])
+def get_post():
+    current_page = request.args.get('page')
+    x = Post.query.count()
+    total_page = x//10
+    datas = get_post_s(int(current_page)*10)
+    print(datas)
+    res = {
+        "total_pages":total_page,
+        "current_page":current_page,
+        "data": datas 
+    }
+    return res
+
+@app.route("/api/news",methods=['GET'])
+def get_news():
+    current_page = request.args.get('page')
+    x = Post.query.count()
+    total_page = x//10
+    datas = get_news_s(int(current_page)*10)
+    print(datas)
+    res = {
+        "total_pages":total_page,
+        "current_page":current_page,
+        "data": datas 
+    }
+    return res
 
 @app.route("/logout")
 @login_required

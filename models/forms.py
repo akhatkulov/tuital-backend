@@ -1,5 +1,6 @@
 from werkzeug import *
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField,TextAreaField
+from wtforms.widgets import TextArea
 from wtforms.validators import InputRequired, Length, ValidationError,DataRequired
 from flask_wtf import FlaskForm
 
@@ -13,6 +14,3 @@ class Sign_Form(FlaskForm):
     password = PasswordField("Parolingiz",validators=[DataRequired()])
     pwd = StringField("Adminlik uchun",validators=[DataRequired()])
     submit = SubmitField("Tasdiqlash")
-
-# class Post():
-#     name = StringFiel

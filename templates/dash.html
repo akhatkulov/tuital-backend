@@ -11,10 +11,34 @@
     <div class="new">
         <h1>Yangilik qo'shish</h1>
         <hr>
+        <fieldset>
+             <legend>Yangilik qo'shish</legend>
+        <form action="/news_adder" method="post" enctype="multipart/form-data">
+            <label for="header">Maqola nomi:</label>
+            <input type="text" name="header"><br> 
+            <label for="body">Maqola matni</label>
+            <textarea type="text" name="body"></textarea><br>
+            <label for="img">Rasmlarni kiriting</label>
+            <input type="file" name="img[]" multiple="true" autocomplete="off" required><br>
+            <button type="submit">Tasdiqlash</button>
+        </form>
+        </fieldset>
     </div>
     <div class="post">
         <h1>Post qo'shish</h1>
-        <h1>
+        <hr>
+        <fieldset>
+            <legend>Post qo'shish</legend>
+       <form action="/poster" method="post" enctype="multipart/form-data">
+           <label for="header">Maqola nomi:</label>
+           <input type="text" name="header"><br> 
+           <label for="body">Maqola matni</label>
+           <textarea type="text" name="body"></textarea><br>
+           <label for="img">Rasmlarni kiriting</label>
+           <input type="file" name="img[]" multiple="true" autocomplete="off" required><br>
+           <button type="submit">Tasdiqlash</button>
+       </form>
+       </fieldset>
     </div>
 </body>
 </html>

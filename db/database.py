@@ -4,7 +4,7 @@ from datetime import datetime
 from flask_login import UserMixin
 from sqlalchemy.schema import PrimaryKeyConstraint
 app.config['SECRET_KEY']="This is secret key, bro!!!"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1945@localhost/dd'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://tuit:1945@localhost/tuit'
 db = SQLAlchemy(app)
 
 class User(db.Model,UserMixin):
@@ -29,7 +29,7 @@ class News(db.Model):
 
 def get_post_s(i: int):
     x = {}
-    for j in range(1,i+1):
+    for j in range(i-9,i+1):
         y = {}
         d =  Post.query.filter_by(id=int(j)).first()
         if d:
@@ -45,7 +45,7 @@ def get_post_s(i: int):
 
 def get_news_s(i: int):
     x = {}
-    for j in range(1,i+1):
+    for j in range(i-9,i+1):
         y = {}
         d =  News.query.filter_by(id=int(j)).first()
         if d:

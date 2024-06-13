@@ -75,7 +75,7 @@ def news_adder():
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                images_url = images_url + filename + "|"
+                images_url = images_url + "/static/uploads/"+filename + "|"
             else:
                 print("error")
 
@@ -110,7 +110,7 @@ def poster():
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                images_url = images_url + filename + "|"
+                images_url = images_url + "/static/uploads/"+filename + "|"
             else:
                 print("error")
 
